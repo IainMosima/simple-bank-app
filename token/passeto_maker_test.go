@@ -5,12 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/require"
 )
 
-func TestJwtMake(t *testing.T) {
-	maker, err := NewJWTMaker(util.RandomString(32))
+func TestPassetoMaker(t *testing.T) {
+	maker, err := NewPassetoMaker(util.RandomString(32))
 	require.NoError(t, err)
 
 	username := util.RandomOwner()
@@ -29,8 +28,8 @@ func TestJwtMake(t *testing.T) {
 	require.WithinDuration(t, expiredAt, payload.ExpiresAtAt, time.Second)
 }
 
-func TestExpiredJWTToken(t *testing.T) {
-	maker, err := NewJWTMaker(util.RandomString(32))
+func TestExpiredPassetoToken(t *testing.T) {
+	maker, err := NewPassetoMaker(util.RandomString(32))
 	require.NoError(t, err)
 
 	token, err := maker.CreateToken(util.RandomOwner(), -time.Minute)
@@ -44,19 +43,19 @@ func TestExpiredJWTToken(t *testing.T) {
 
 }
 
-func TestInvalidJWTTOKENlgNone(t *testing.T) {
-	payload, err := NewPayload(util.RandomOwner(), time.Minute)
-	require.NoError(t, err)
+// func TestInvalidJWTTOKENlgNone(t *testing.T) {
+// 	payload, err := NewPayload(util.RandomOwner(), time.Minute)
+// 	require.NoError(t, err)
 
-	jwtTokem := jwt.NewWithClaims(jwt.SigningMethodNone, payload)
-	token, err := jwtTokem.SignedString(jwt.UnsafeAllowNoneSignatureType)
-	require.NoError(t, err)
+// 	jwtTokem := jwt.NewWithClaims(jwt.SigningMethodNone, payload)
+// 	token, err := jwtTokem.SignedString(jwt.UnsafeAllowNoneSignatureType)
+// 	require.NoError(t, err)
 
-	maker, err := NewJWTMaker(util.RandomString(32))
-	require.NoError(t, err)
+// 	maker, err := NewJWTMaker(util.RandomString(32))
+// 	require.NoError(t, err)
 
-	payload, err = maker.VerifyToken(token)
-	require.Error(t, err)
-	require.EqualError(t, err, ErrInvalidToken.Error())
-	require.Nil(t, payload)
-}
+// 	payload, err = maker.VerifyToken(token)
+// 	require.Error(t, err)
+// 	require.EqualError(t, err, ErrInvalidToken.Error())
+// 	require.Nil(t, payload)
+// }
